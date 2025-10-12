@@ -3,39 +3,48 @@ from openai import OpenAI
 from dotenv import load_dotenv
 import os
 
-# Carrega variáveis do .env (apenas local, no Streamlit Cloud use Secrets)
+# 🔹 Carrega variáveis do .env (apenas local; no Streamlit Cloud use Secrets)
 load_dotenv()
 
-# Configuração da página Streamlit
+# 🔹 Configuração da página Streamlit
 st.set_page_config(page_title="Agente de IA Jurídico", page_icon="⚖️")
 st.title("⚖️ Agente de IA Jurídico")
 
-# Recupera a chave da API (funciona tanto local quanto no Streamlit Cloud)
+# 🔹 Recupera a chave da API (funciona tanto local quanto no Streamlit Cloud)
 api_key = os.getenv("OPENROUTER_API_KEY") or os.getenv("OPENAI_API_KEY")
 
 if not api_key:
     st.error("❌ Nenhuma chave de API encontrada. Configure OPENROUTER_API_KEY ou OPENAI_API_KEY.")
     st.stop()
 
-# Inicializa o cliente OpenRouter
+# 🔹 Inicializa o cliente OpenRouter
 client = OpenAI(
     api_key=api_key,
     base_url="https://openrouter.ai/api/v1"
 )
 
-# Modelo fixo do projeto
-MODELO = "deepseek/deepseek-r1"
+# 🔹 Modelos gratuitos disponíveis no OpenRouter
+MODELOS = [
+    "deepseek/deepseek-v3.2-exp",
+    "deepseek/deepseek-v3",
+    "deepseek/deepseek-r1",
+    "deepseek/deepseek-r1-0528"
+]
 
-# Inicializa o histórico de chat no session_state do Streamlit
+# 🔹 Seletor de modelo no sidebar
+st.sidebar.header("⚙️ Configurações")
+modelo_escolhido = st.sidebar.selectbox("Escolha o modelo:", MODELOS, index=2)
+
+# 🔹 Inicializa o histórico de chat no session_state do Streamlit
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
-# Exibe mensagens anteriores do chat
+# 🔹 Exibe mensagens anteriores do chat
 for message in st.session_state.messages:
     with st.chat_message(message["role"]):
         st.markdown(message["content"])
 
-# Lógica para nova entrada do usuário
+# 🔹 Lógica para nova entrada do usuário
 if prompt := st.chat_input("Como posso ajudar com sua consulta jurídica?"):
     # Armazena a mensagem do usuário
     st.session_state.messages.append({"role": "user", "content": prompt})
@@ -48,7 +57,7 @@ if prompt := st.chat_input("Como posso ajudar com sua consulta jurídica?"):
         full_response = ""
         try:
             stream = client.chat.completions.create(
-                model=MODELO,
+                model=modelo_escolhido,
                 messages=[
                     {"role": "system", "content": "Você é um assistente jurídico prestativo e experiente. Forneça informações jurídicas precisas e concisas, mas sempre aconselhe o usuário a consultar um advogado qualificado para aconselhamento legal específico."}
                 ] + [
@@ -69,4 +78,5 @@ if prompt := st.chat_input("Como posso ajudar com sua consulta jurídica?"):
 
     # Armazena a resposta no histórico
     st.session_state.messages.append({"role": "assistant", "content": full_response})
+
 
