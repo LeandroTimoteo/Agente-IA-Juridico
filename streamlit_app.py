@@ -3,16 +3,23 @@ from openai import OpenAI
 from dotenv import load_dotenv
 import os
 
-# Carrega variáveis do .env
+# Carrega variáveis do .env (apenas local, no Streamlit Cloud use Secrets)
 load_dotenv()
 
 # Configuração da página Streamlit
 st.set_page_config(page_title="Agente de IA Jurídico", page_icon="⚖️")
 st.title("⚖️ Agente de IA Jurídico")
 
-# Inicializa o cliente OpenRouter com DeepSeek
+# Recupera a chave da API (funciona tanto local quanto no Streamlit Cloud)
+api_key = os.getenv("OPENROUTER_API_KEY") or os.getenv("OPENAI_API_KEY")
+
+if not api_key:
+    st.error("❌ Nenhuma chave de API encontrada. Configure OPENROUTER_API_KEY ou OPENAI_API_KEY.")
+    st.stop()
+
+# Inicializa o cliente OpenRouter
 client = OpenAI(
-    api_key=os.getenv("OPENROUTER_API_KEY"),
+    api_key=api_key,
     base_url="https://openrouter.ai/api/v1"
 )
 
@@ -30,10 +37,12 @@ for message in st.session_state.messages:
 
 # Lógica para nova entrada do usuário
 if prompt := st.chat_input("Como posso ajudar com sua consulta jurídica?"):
+    # Armazena a mensagem do usuário
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user"):
         st.markdown(prompt)
 
+    # Resposta do assistente
     with st.chat_message("assistant"):
         message_placeholder = st.empty()
         full_response = ""
@@ -49,12 +58,15 @@ if prompt := st.chat_input("Como posso ajudar com sua consulta jurídica?"):
                 stream=True,
             )
             for chunk in stream:
-                full_response += chunk.choices[0].delta.content or ""
-                message_placeholder.markdown(full_response + "▌")
+                if chunk.choices[0].delta.content:
+                    full_response += chunk.choices[0].delta.content
+                    message_placeholder.markdown(full_response + "▌")
             message_placeholder.markdown(full_response)
         except Exception as e:
             st.error(f"Ocorreu um erro ao gerar a resposta: {e}")
-            full_response = "Desculpe, não consegui processar sua solicitação no momento. Por favor, tente novamente mais tarde."
+            full_response = "⚠️ Desculpe, não consegui processar sua solicitação no momento. Por favor, tente novamente mais tarde."
             message_placeholder.markdown(full_response)
 
+    # Armazena a resposta no histórico
     st.session_state.messages.append({"role": "assistant", "content": full_response})
+
