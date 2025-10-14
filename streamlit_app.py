@@ -3,55 +3,38 @@ from openai import OpenAI
 from dotenv import load_dotenv
 import os
 
-# 🔹 Carrega variáveis do .env (apenas local; no Streamlit Cloud use Secrets)
+# 🔹 Carrega variáveis do .env (local) — no Cloud use Secrets
 load_dotenv()
 
-# 🔹 Configuração da página Streamlit
 st.set_page_config(page_title="Agente de IA Jurídico", page_icon="⚖️")
 st.title("⚖️ Agente de IA Jurídico")
 
-# 🔹 Recupera a chave da API (funciona tanto local quanto no Streamlit Cloud)
+# 🔹 Recupera chave e modelo dos Secrets/Env
 api_key = os.getenv("OPENROUTER_API_KEY") or os.getenv("OPENAI_API_KEY")
+modelo_escolhido = os.getenv("DEFAULT_MODEL", "deepseek/deepseek-r1")
 
 if not api_key:
     st.error("❌ Nenhuma chave de API encontrada. Configure OPENROUTER_API_KEY ou OPENAI_API_KEY.")
     st.stop()
 
 # 🔹 Inicializa o cliente OpenRouter
-client = OpenAI(
-    api_key=api_key,
-    base_url="https://openrouter.ai/api/v1"
-)
+client = OpenAI(api_key=api_key, base_url="https://openrouter.ai/api/v1")
 
-# 🔹 Modelos gratuitos disponíveis no OpenRouter
-MODELOS = [
-    "deepseek/deepseek-v3.2-exp",
-    "deepseek/deepseek-v3",
-    "deepseek/deepseek-r1",
-    "deepseek/deepseek-r1-0528"
-]
-
-# 🔹 Seletor de modelo no sidebar
-st.sidebar.header("⚙️ Configurações")
-modelo_escolhido = st.sidebar.selectbox("Escolha o modelo:", MODELOS, index=2)
-
-# 🔹 Inicializa o histórico de chat no session_state do Streamlit
+# 🔹 Histórico
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
-# 🔹 Exibe mensagens anteriores do chat
+# 🔹 Exibe histórico
 for message in st.session_state.messages:
     with st.chat_message(message["role"]):
         st.markdown(message["content"])
 
-# 🔹 Lógica para nova entrada do usuário
+# 🔹 Entrada do usuário
 if prompt := st.chat_input("Como posso ajudar com sua consulta jurídica?"):
-    # Armazena a mensagem do usuário
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user"):
         st.markdown(prompt)
 
-    # Resposta do assistente
     with st.chat_message("assistant"):
         message_placeholder = st.empty()
         full_response = ""
@@ -76,7 +59,6 @@ if prompt := st.chat_input("Como posso ajudar com sua consulta jurídica?"):
             full_response = "⚠️ Desculpe, não consegui processar sua solicitação no momento. Por favor, tente novamente mais tarde."
             message_placeholder.markdown(full_response)
 
-    # Armazena a resposta no histórico
     st.session_state.messages.append({"role": "assistant", "content": full_response})
 
 
