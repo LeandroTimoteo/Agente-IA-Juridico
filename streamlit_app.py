@@ -62,3 +62,4 @@ if prompt := st.chat_input("Como posso ajudar com sua consulta jurídica?"):
     st.session_state.messages.append({"role": "assistant", "content": full_response})
 
 
+
