@@ -12,7 +12,7 @@ st.title("⚖️ Agente de IA Jurídico")
 
 # 🔹 Recupera chave e modelo dos Secrets/Env
 api_key = os.getenv("OPENROUTER_API_KEY") or os.getenv("OPENAI_API_KEY")
-modelo_escolhido = os.getenv("DEFAULT_MODEL", "deepseek/deepseek-r1")
+modelo_escolhido = os.getenv("DEFAULT_MODEL", "google/gemma-3-12b-it:free")
 
 if not api_key:
     st.error("❌ Nenhuma chave de API encontrada. Configure OPENROUTER_API_KEY ou OPENAI_API_KEY.")
@@ -44,15 +44,6 @@ if prompt := st.chat_input("Como posso ajudar com sua consulta jurídica?"):
             stream = client.chat.completions.create(
                 model=modelo_escolhido,
                 messages=[
-                    {
-                        "role": "system",
-                        "content": (
-                            "Você é um assistente jurídico prestativo e experiente. "
-                            "Forneça informações jurídicas precisas e concisas, mas sempre aconselhe o usuário "
-                            "a consultar um advogado qualificado para aconselhamento legal específico."
-                        )
-                    }
-                ] + [
                     {"role": m["role"], "content": m["content"]}
                     for m in st.session_state.messages
                 ],
@@ -75,8 +66,6 @@ if prompt := st.chat_input("Como posso ajudar com sua consulta jurídica?"):
             message_placeholder.markdown(full_response)
 
     st.session_state.messages.append({"role": "assistant", "content": full_response})
-
-
 
 
 
