@@ -6,6 +6,7 @@ import os
 # 🔹 Carrega variáveis do .env (local) — no Cloud use Secrets
 load_dotenv()
 
+# 🔹 Configuração da página
 st.set_page_config(page_title="Agente de IA Jurídico", page_icon="⚖️")
 st.title("⚖️ Agente de IA Jurídico")
 
@@ -20,11 +21,11 @@ if not api_key:
 # 🔹 Inicializa o cliente OpenRouter
 client = OpenAI(api_key=api_key, base_url="https://openrouter.ai/api/v1")
 
-# 🔹 Histórico
+# 🔹 Histórico de mensagens
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
-# 🔹 Exibe histórico
+# 🔹 Exibe histórico de conversa
 for message in st.session_state.messages:
     with st.chat_message(message["role"]):
         st.markdown(message["content"])
@@ -38,28 +39,44 @@ if prompt := st.chat_input("Como posso ajudar com sua consulta jurídica?"):
     with st.chat_message("assistant"):
         message_placeholder = st.empty()
         full_response = ""
+
         try:
             stream = client.chat.completions.create(
                 model=modelo_escolhido,
                 messages=[
-                    {"role": "system", "content": "Você é um assistente jurídico prestativo e experiente. Forneça informações jurídicas precisas e concisas, mas sempre aconselhe o usuário a consultar um advogado qualificado para aconselhamento legal específico."}
+                    {
+                        "role": "system",
+                        "content": (
+                            "Você é um assistente jurídico prestativo e experiente. "
+                            "Forneça informações jurídicas precisas e concisas, mas sempre aconselhe o usuário "
+                            "a consultar um advogado qualificado para aconselhamento legal específico."
+                        )
+                    }
                 ] + [
                     {"role": m["role"], "content": m["content"]}
                     for m in st.session_state.messages
                 ],
                 stream=True,
             )
+
             for chunk in stream:
                 if chunk.choices[0].delta.content:
                     full_response += chunk.choices[0].delta.content
                     message_placeholder.markdown(full_response + "▌")
+
             message_placeholder.markdown(full_response)
+
         except Exception as e:
             st.error(f"Ocorreu um erro ao gerar a resposta: {e}")
-            full_response = "⚠️ Desculpe, não consegui processar sua solicitação no momento. Por favor, tente novamente mais tarde."
+            full_response = (
+                "⚠️ Desculpe, não consegui processar sua solicitação no momento. "
+                "Por favor, tente novamente mais tarde."
+            )
             message_placeholder.markdown(full_response)
 
     st.session_state.messages.append({"role": "assistant", "content": full_response})
+
+
 
 
 
