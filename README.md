@@ -41,12 +41,12 @@ Agente-IA-Juridico/
 ├── streamlit_app.py       # Código principal do agente jurídico
 └── README.md              # Documentação do projeto
 
-⚙️ Instalação e Execução Local
+# ⚙️ Instalação e Execução Local
 Crie e ative o ambiente virtual:
 python -m venv .venv
 .venv\Scripts\activate  # Windows
 
-Instale as dependências:
+# Instale as dependências:
 
 bash
 pip install -r requirements.txt
@@ -56,27 +56,28 @@ Execute o app:
 bash
 streamlit run streamlit_app.py
 
-🧠 Exemplos de Perguntas Jurídicas
-Quais são os direitos fundamentais garantidos pela Constituição?
-
-O que caracteriza vínculo empregatício?
-
-Como funciona a usucapião no Brasil?
-
-Qual a diferença entre dolo e culpa?
-
-O que é responsabilidade civil objetiva?
-
-📌 Licença e Contato
+# 📌 Licença e Contato
 Este projeto é de uso livre para fins educacionais e experimentais. O conteúdo gerado pelo agente jurídico não substitui orientação profissional — recomenda-se sempre consultar um advogado qualificado para decisões legais.
 
-Autor: 👨‍💻 Leandro Timóteo Silva — Analista de Sistemas
+**Autor:**  
+**👨‍💻 Leandro Timóteo Silva — Analista de Sistemas**  
+- 📧 **E-mail:** [leandrinhots6@gmail.com](mailto:leandrinhots6@gmail.com)  
+- 💼 **LinkedIn:** [linkedin.com/in/leandro-timóteo-ads](https://www.linkedin.com/in/leandro-timóteo-ads)  
+- 📱 **WhatsApp:** [Enviar mensagem](https://wa.me/5583987830223)
 
-📧 leandrinhots6@gmail.com
+## 🎯 Demonstração Visual
 
-💼 LinkedIn
+### 📸 Interface do Agente Jurídico
 
-📱 WhatsApp
+![Captura de tela do app](imagens/Captura%20de%20tela%202025-10-19%20194953.png)
+
+### 🎞️ Funcionamento do Agente em Tempo Real
+
+![GIF do Agente Jurídico](imagens/Agente-IA-Jurídico-gif.gif)
+
+
+
+
 
 
 
