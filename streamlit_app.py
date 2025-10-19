@@ -9,7 +9,7 @@ st.set_page_config(page_title="Agente de IA Jurídico", page_icon="⚖️")
 st.title("⚖️ Agente de IA Jurídico")
 
 api_key = os.getenv("OPENROUTER_API_KEY") or os.getenv("OPENAI_API_KEY")
-modelo_escolhido = os.getenv("DEFAULT_MODEL", "tngtech/deepseek-tng-r1t2-chimera")
+modelo_escolhido = os.getenv("DEFAULT_MODEL", "tngtech/deepseek-r1t2-chimera:free")
 
 if not api_key:
     st.error("❌ Nenhuma chave de API encontrada. Configure OPENROUTER_API_KEY ou OPENAI_API_KEY.")
