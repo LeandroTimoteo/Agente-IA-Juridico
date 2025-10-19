@@ -73,7 +73,9 @@ Este projeto é de uso livre para fins educacionais e experimentais. O conteúdo
 
 ### 🎞️ Funcionamento do Agente em Tempo Real
 
-![GIF do Agente Jurídico](imagens/Agente-IA-Jurídico-gif.gif)
+![GIF do Agente Jurídico](videos/Agente-IA-Juridico-gif.gif)
+
+
 
 
 
