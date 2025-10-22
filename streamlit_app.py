@@ -22,11 +22,15 @@ if not api_key:
 # 🧠 Cliente OpenRouter
 client = OpenAI(api_key=api_key, base_url="https://openrouter.ai/api/v1")
 
+# 🧹 Botão para limpar conversa
+if st.button("🧹 Limpar conversa"):
+    st.session_state.messages = []
+    st.experimental_rerun()
+
 # 💬 Histórico de mensagens
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
-# 📜 Exibe mensagens anteriores
 for message in st.session_state.messages:
     with st.chat_message(message["role"]):
         st.markdown(message["content"])
@@ -77,3 +81,4 @@ if prompt := st.chat_input("Como posso ajudar com sua consulta jurídica?"):
             message_placeholder.markdown(full_response)
 
     st.session_state.messages.append({"role": "assistant", "content": full_response})
+
