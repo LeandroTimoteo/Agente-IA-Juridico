@@ -75,6 +75,11 @@ Este projeto é de uso livre para fins educacionais e experimentais. O conteúdo
 
 ![GIF do Agente Jurídico](videos/Agente-IA-Juridico-gif.gif)
 
+## 🔗 Acesse o Agente Jurídico com IA
+
+👉 [Clique aqui para abrir o app](https://agente-ia-juridico-jtc2kzet7dikxxjvxsnhyz.streamlit.app/)
+
+
 
 
 
