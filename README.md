@@ -69,7 +69,7 @@ Este projeto é de uso livre para fins educacionais e experimentais. O conteúdo
 
 ### 📸 Interface do Agente Jurídico
 
-![Captura de tela do app](imagens/Captura%20de%20tela%202025-10-19%20194953.png)
+![Interface do Agente Jurídico](imagens/interface-agente-juridico.png)
 
 ### 🎞️ Funcionamento do Agente em Tempo Real
 
