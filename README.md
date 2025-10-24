@@ -77,14 +77,11 @@ Este projeto é de uso livre para fins educacionais e experimentais. O conteúdo
 
 ## 🔗 Acesse o Agente Jurídico com IA
 
-## 🔗 Acesse o Agente Jurídico com IA
-
 👉 [Clique aqui para abrir o app](https://agente-ia-juridico-jtc2kzet7dikxxjvxsnhyz.streamlit.app/)
 
 ## 🔗 Repositório no GitHub
 Adicione aqui o link do repositório para facilitar acesso e contribuições.
 
-- Repositório: https://github.com/USER/REPO
 - Licença: MIT ![License](https://img.shields.io/badge/license-MIT-blue)
 
 ## 🤝 Como contribuir (rápido)
@@ -92,6 +89,8 @@ Adicione aqui o link do repositório para facilitar acesso e contribuições.
 2. Crie uma branch: git checkout -b feat/nova-funcionalidade
 3. Faça alterações, commit e push
 4. Abra um Pull Request
+
+Thank you very much..
 
 
 
