@@ -25,7 +25,7 @@ client = OpenAI(api_key=api_key, base_url="https://openrouter.ai/api/v1")
 # 🧹 Botão para limpar conversa
 if st.button("🧹 Limpar conversa"):
     st.session_state.messages = []
-    st.experimental_rerun()
+    st.rerun()   # ✅ atualizado (antes era st.experimental_rerun)
 
 # 💬 Histórico de mensagens
 if "messages" not in st.session_state:
@@ -81,4 +81,3 @@ if prompt := st.chat_input("Como posso ajudar com sua consulta jurídica?"):
             message_placeholder.markdown(full_response)
 
     st.session_state.messages.append({"role": "assistant", "content": full_response})
-
