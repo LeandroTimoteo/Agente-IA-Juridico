@@ -1,0 +1,10 @@
+name: agente-ia-env
+channels:
+  - defaults
+dependencies:
+  - python=3.10
+  - pip
+  - pip:
+      - streamlit>=1.28
+      - openai>=1.3
+      - python-dotenv>=1.0
