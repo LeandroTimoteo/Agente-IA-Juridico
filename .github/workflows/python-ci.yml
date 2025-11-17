@@ -17,7 +17,7 @@ jobs:
       - name: Configurar Python
         uses: actions/setup-python@v4
         with:
-          python-version: 3.10
+          python-version: '3.10'
 
       - name: Instalar dependências
         run: |
@@ -28,4 +28,5 @@ jobs:
       - name: Rodar testes com pytest
         run: |
           venv/bin/pytest
+
 
