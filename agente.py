@@ -8,3 +8,4 @@ def classificar_acao(texto: str) -> str:
         return "penal"
     else:
         return "desconhecido"
+
