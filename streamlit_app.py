@@ -3,31 +3,31 @@ import os
 from dotenv import load_dotenv
 from openai import OpenAI
 
-# Carrega variáveis locais
+# Load local environment variables
 load_dotenv()
 
-# Configuração da página
-st.set_page_config(page_title="Agente de IA Jurídico", page_icon="⚖️")
-st.title("⚖️ Agente de IA Jurídico")
+# Page configuration
+st.set_page_config(page_title="Legal AI Agent", page_icon="⚖️")
+st.title("⚖️ Legal AI Agent")
 
-# Chaves e modelo (Cloud → st.secrets, Local → .env)
+# Keys and model (Cloud → st.secrets, Local → .env)
 api_key = st.secrets.get("OPENROUTER_API_KEY") or os.getenv("OPENROUTER_API_KEY") or os.getenv("OPENAI_API_KEY")
-modelo_escolhido = st.secrets.get("DEFAULT_MODEL") or os.getenv("DEFAULT_MODEL", "tngtech/deepseek-r1t2-chimera:free")
+chosen_model = st.secrets.get("DEFAULT_MODEL") or os.getenv("DEFAULT_MODEL", "tngtech/deepseek-r1t2-chimera:free")
 admin_mode = st.secrets.get("ADMIN_MODE") or os.getenv("ADMIN_MODE", "false")
 
 if not api_key:
-    st.error("❌ Nenhuma chave de API encontrada. Configure OPENROUTER_API_KEY ou OPENAI_API_KEY.")
+    st.error("❌ No API key found. Please configure OPENROUTER_API_KEY or OPENAI_API_KEY.")
     st.stop()
 
-# Cliente OpenRouter
+# OpenRouter client
 client = OpenAI(api_key=api_key, base_url="https://openrouter.ai/api/v1")
 
-# Botão para limpar conversa
-if st.button("🧹 Limpar conversa"):
+# Button to clear conversation
+if st.button("🧹 Clear conversation"):
     st.session_state.messages = []
     st.rerun()
 
-# Histórico
+# Conversation history
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
@@ -35,8 +35,8 @@ for message in st.session_state.messages:
     with st.chat_message(message["role"]):
         st.markdown(message["content"])
 
-# Entrada do usuário
-if prompt := st.chat_input("Como posso ajudar com sua consulta jurídica?"):
+# User input
+if prompt := st.chat_input("How can I assist with your legal inquiry?"):
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user"):
         st.markdown(prompt)
@@ -46,11 +46,18 @@ if prompt := st.chat_input("Como posso ajudar com sua consulta jurídica?"):
         full_response = ""
 
         try:
-            with st.spinner("🔎 Consultando o agente jurídico..."):
+            with st.spinner("🔎 Consulting the legal agent..."):
                 stream = client.chat.completions.create(
-                    model=modelo_escolhido,
+                    model=chosen_model,
                     messages=[
-                        {"role": "system", "content": "Você é um assistente jurídico prestativo e experiente. Forneça informações jurídicas precisas e concisas, mas sempre aconselhe o usuário a consultar um advogado qualificado para aconselhamento legal específico."}
+                        {
+                            "role": "system",
+                            "content": (
+                                "You are a helpful and experienced legal assistant. "
+                                "Provide accurate and concise legal information, but always advise the user "
+                                "to consult a qualified lawyer for specific legal advice."
+                            ),
+                        }
                     ] + st.session_state.messages,
                     stream=True,
                 )
@@ -63,8 +70,11 @@ if prompt := st.chat_input("Como posso ajudar com sua consulta jurídica?"):
             message_placeholder.markdown(full_response)
 
         except Exception as e:
-            st.error(f"Ocorreu um erro ao gerar a resposta: {e}")
-            full_response = "⚠️ Desculpe, não consegui processar sua solicitação no momento. Tente novamente mais tarde."
+            st.error(f"An error occurred while generating the response: {e}")
+            full_response = (
+                "⚠️ Sorry, I couldn't process your request at the moment. Please try again later."
+            )
             message_placeholder.markdown(full_response)
 
     st.session_state.messages.append({"role": "assistant", "content": full_response})
+
