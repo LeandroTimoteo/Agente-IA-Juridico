@@ -49,7 +49,6 @@ This project is free to use for educational and experimental purposes. The conte
 - 💼 **LinkedIn:** [Leandro Timóteo ADS](https://www.linkedin.com/in/leandro-timoteo-ads)  
 - 📱 **WhatsApp:** [Enviar mensagem](https://wa.me/5583987830223)
 
-
 🎯 Visual Demonstration
 📸 Legal Agent Interface
 
@@ -66,6 +65,7 @@ This project is free to use for educational and experimental purposes. The conte
 ## 🔗 Access the Legal AI Agent
 
 👉 [Click for the app](https://agente-ia-juridico-jtc2kzet7dikxxjvxsnhyz.streamlit.app/)
+
 
 🔗 GitHub Repository
 Add your repository link here to facilitate access and contributions.
