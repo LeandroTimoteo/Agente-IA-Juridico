@@ -2,32 +2,41 @@ import streamlit as st
 import os
 from dotenv import load_dotenv
 from openai import OpenAI
+import traceback
 
-# Load local environment variables
+# 🔧 Load local environment variables
 load_dotenv()
 
-# Page configuration
+# ⚙️ Page configuration
 st.set_page_config(page_title="Legal AI Agent", page_icon="⚖️")
 st.title("⚖️ Legal AI Agent")
 
-# Keys and model (Cloud → st.secrets, Local → .env)
-api_key = st.secrets.get("OPENROUTER_API_KEY") or os.getenv("OPENROUTER_API_KEY") or os.getenv("OPENAI_API_KEY")
-chosen_model = st.secrets.get("DEFAULT_MODEL") or os.getenv("DEFAULT_MODEL", "tngtech/deepseek-r1t2-chimera:free")
+# 🔑 Keys and model (Cloud → st.secrets, Local → .env)
+api_key = (
+    st.secrets.get("OPENROUTER_API_KEY")
+    or os.getenv("OPENROUTER_API_KEY")
+    or os.getenv("OPENAI_API_KEY")
+)
+chosen_model = (
+    st.secrets.get("DEFAULT_MODEL")
+    or os.getenv("DEFAULT_MODEL", "tngtech/deepseek-r1t2-chimera:free")
+)
 admin_mode = st.secrets.get("ADMIN_MODE") or os.getenv("ADMIN_MODE", "false")
 
+# 🚨 Validate API key
 if not api_key:
     st.error("❌ No API key found. Please configure OPENROUTER_API_KEY or OPENAI_API_KEY.")
     st.stop()
 
-# OpenRouter client
+# 🤖 OpenRouter client
 client = OpenAI(api_key=api_key, base_url="https://openrouter.ai/api/v1")
 
-# Button to clear conversation
+# 🧹 Button to clear conversation
 if st.button("🧹 Clear conversation"):
     st.session_state.messages = []
     st.rerun()
 
-# Conversation history
+# 💬 Conversation history
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
@@ -35,7 +44,7 @@ for message in st.session_state.messages:
     with st.chat_message(message["role"]):
         st.markdown(message["content"])
 
-# User input
+# 📝 User input
 if prompt := st.chat_input("How can I assist with your legal inquiry?"):
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user"):
@@ -70,11 +79,13 @@ if prompt := st.chat_input("How can I assist with your legal inquiry?"):
             message_placeholder.markdown(full_response)
 
         except Exception as e:
-            st.error(f"An error occurred while generating the response: {e}")
+            st.error(f"⚠️ An error occurred while generating the response: {e}")
+            print(traceback.format_exc())
             full_response = (
                 "⚠️ Sorry, I couldn't process your request at the moment. Please try again later."
             )
             message_placeholder.markdown(full_response)
 
     st.session_state.messages.append({"role": "assistant", "content": full_response})
+
 

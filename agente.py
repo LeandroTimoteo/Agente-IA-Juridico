@@ -1,10 +1,15 @@
 def classificar_acao(texto: str) -> str:
     texto = texto.lower()
-    if "relação de trabalho" in texto or "salário" in texto or "emprego" in texto:
+
+    trabalhista = ["relação de trabalho", "salário", "emprego", "demissão", "fgts"]
+    civil = ["contrato", "indenização", "dívida", "aluguel", "herança"]
+    penal = ["crime", "pena", "acusado", "prisão", "homicídio"]
+
+    if any(palavra in texto for palavra in trabalhista):
         return "trabalhista"
-    elif "contrato" in texto or "indenização" in texto or "dívida" in texto:
+    elif any(palavra in texto for palavra in civil):
         return "civil"
-    elif "crime" in texto or "pena" in texto or "acusado" in texto:
+    elif any(palavra in texto for palavra in penal):
         return "penal"
     else:
         return "desconhecido"
