@@ -4,7 +4,18 @@ import io
 import re
 import traceback
 import json
+import importlib
 from dotenv import load_dotenv
+
+_REQUIRED = {"openai": "openai>=1.3"}
+_missing = []
+for mod, pip_name in _REQUIRED.items():
+    if importlib.util.find_spec(mod) is None:
+        _missing.append(pip_name)
+if _missing:
+    st.error(f"Pacotes ausentes: {', '.join(_missing)}. Execute: pip install -r requirements.txt")
+    st.stop()
+
 from openai import OpenAI
 from agente import classificar_acao
 
