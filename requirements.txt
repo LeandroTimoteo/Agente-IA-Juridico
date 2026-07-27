@@ -6,4 +6,3 @@ pandas
 requests
 plotly
 pytest
-# Forced rebuild - fix openai dependency
